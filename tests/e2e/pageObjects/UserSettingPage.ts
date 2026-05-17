@@ -1,5 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test';
 
+import { appUrl, BASE_URL } from '../support/urls';
+
 export class UserSettingPage {
   public readonly page: Page;
   public readonly baseUrl: string;
@@ -16,8 +18,8 @@ export class UserSettingPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.baseUrl = 'http://localhost:3000';
-    this.userSettingsUrl = `${this.baseUrl}/settings/users`;
+    this.baseUrl = BASE_URL;
+    this.userSettingsUrl = appUrl('/settings/users');
     this.profileAndSettingButton = this.page.locator("button[title='Profile and Settings']");
     this.usersButton = this.page.getByRole('button', { name: /^Users$/ }).nth(0);
     this.dashboardTitle = this.page.locator("div[title='Settings: Users']");
