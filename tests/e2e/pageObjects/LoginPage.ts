@@ -1,7 +1,5 @@
 import { Locator, Page } from '@playwright/test';
 
-import { appUrl, BASE_URL } from '../support/urls';
-
 export class LoginPage {
   public readonly baseUrl: string;
   public readonly page: Page;
@@ -14,9 +12,9 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.baseUrl = BASE_URL;
-    this.loginUrl = appUrl('/login');
-    this.dashboardUrl = appUrl('/');
+    this.baseUrl = 'http://localhost:3000';
+    this.loginUrl = `${this.baseUrl}/login`;
+    this.dashboardUrl = `${this.baseUrl}/`;
 
     this.loginBtn = this.page.locator("button[title='Log in']");
     this.emailField = this.page.locator("input[name='emailOrUsername']");

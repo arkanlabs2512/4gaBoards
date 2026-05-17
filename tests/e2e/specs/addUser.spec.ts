@@ -1,19 +1,17 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pageObjects/LoginPage';
 import { UserSettingPage } from '../pageObjects/UserSettingPage';
-import { deleteUsersByEmail } from '../support/api';
 
-test('admin user can create a new user', async ({ page, request }) => {
+test('admin user can create a new user', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const userSettingPage = new UserSettingPage(page);
   const createdUserEmails: string[] = [];
-  const uniqueId = Date.now().toString().slice(-8);
 
   const user = {
-    email: `e2e-user-${uniqueId}@example.com`,
+    email: 'test_user@gmail.com',
     password: 'Abcde@123',
-    name: `E2E User ${uniqueId}`,
-    username: `e2e_${uniqueId}`,
+    name: 'test user',
+    username: 'test_user',
   };
 
   try {
@@ -43,8 +41,12 @@ test('admin user can create a new user', async ({ page, request }) => {
       return;
     }
 
-    await deleteUsersByEmail(page, request, [...createdUserEmails].reverse()).catch((error: unknown) => {
-      console.warn(`Cleanup failed for users ${createdUserEmails.join(', ')}:`, error);
-    });
+    await userSettingPage.navigateToUsersSettingPage();
+
+    for (const email of [...createdUserEmails].reverse()) {
+      await userSettingPage.deleteUserByEmail(email).catch((error: unknown) => {
+        console.warn(`Cleanup failed for user ${email}:`, error);
+      });
+    }
   }
 });
